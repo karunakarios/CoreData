@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "The List"
+        self.title = "Persons List"
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         _ = CoreDataManager.sharedInstance.applicationDocumentsDirectory
     }
