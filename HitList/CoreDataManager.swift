@@ -18,6 +18,7 @@ public class CoreDataManager:NSObject {
     //MARK: Shared Instance
     static let sharedInstance: CoreDataManager = CoreDataManager.init()
     static let storeName = "HitList"
+    static let isHardDeleteAllowed = true
     
     // MARK: - Core Data stack
     
@@ -82,7 +83,7 @@ public class CoreDataManager:NSObject {
         }
     }
     
-    func savePerson(id: Int, name: String, lastUpdated: Date, grade: String?, onCompletion: @escaping (_ person:NSManagedObject) -> Void, onFailure: @escaping (_ error: NSError) -> Void) {
+    func savePerson(id: Int, name: String, lastUpdated: Date, grade: String?, address: String?, onCompletion: @escaping (_ person:NSManagedObject) -> Void, onFailure: @escaping (_ error: NSError) -> Void) {
         
         let managedContext = CoreDataManager.sharedInstance.persistentContainer.viewContext
         let isvip = (grade != nil) ? true : false
@@ -97,6 +98,13 @@ public class CoreDataManager:NSObject {
         
         if isvip {
             (person as! VIP).grade = grade!
+        }
+        
+        if let personAddress = address {
+            let entity = NSEntityDescription.entity(forEntityName: "Address", in: managedContext)!  //entity description
+            let addressObject = NSManagedObject(entity: entity, insertInto: managedContext) as! Address
+            addressObject.city = personAddress
+            (person as! Person).address = addressObject
         }
         
         do {
@@ -125,8 +133,16 @@ public class CoreDataManager:NSObject {
     
     func delete(person: NSManagedObject, onCompletion: @escaping (_ status:Bool) -> Void) {
         let managedContext = CoreDataManager.sharedInstance.persistentContainer.viewContext
-        (person as! Person).active = false
-        (person as! Person).lastUpdated = Date() as NSDate?
+        
+        if CoreDataManager.isHardDeleteAllowed {
+            managedContext.delete(person)
+        }
+        
+        else {
+            (person as! Person).active = false
+            (person as! Person).lastUpdated = Date() as NSDate?
+        }
+
         do {
             try managedContext.save()
             onCompletion(true)

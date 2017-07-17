@@ -45,14 +45,20 @@ class ViewController: UIViewController {
             }
             
             var personGrade: String?
+            var personAddress: String?
             
-            if let textField2 = alert.textFields?[1] {
-                if !(textField2.text?.isEmpty)! {
-                    personGrade = textField2.text!
+            if let gradeField = alert.textFields?[1] {
+                if !(gradeField.text?.isEmpty)! {
+                    personGrade = gradeField.text!
+                }
+            }
+            if let addressField = alert.textFields?[2] {
+                if !(addressField.text?.isEmpty)! {
+                    personAddress = addressField.text!
                 }
             }
             
-            CoreDataManager.sharedInstance.savePerson(id: self.people.count + 1, name: nameToSave, lastUpdated: Date(), grade: personGrade, onCompletion: { (person: NSManagedObject) in
+            CoreDataManager.sharedInstance.savePerson(id: self.people.count + 1, name: nameToSave, lastUpdated: Date(), grade: personGrade, address: personAddress, onCompletion: { (person: NSManagedObject) in
                 self.people.append(person)
                 self.tableView.reloadData()
             }, onFailure: { (err: NSError) in
@@ -67,6 +73,16 @@ class ViewController: UIViewController {
         let cancelAction = UIAlertAction(title: "Cancel", style: .default)
         alert.addTextField()
         alert.addTextField()
+        alert.addTextField()
+        
+        if let nameField = alert.textFields?[0],
+            let gradeField = alert.textFields?[1],
+            let addressField = alert.textFields?[2] {
+            nameField.placeholder = "Name"
+            gradeField.placeholder = "Grade"
+            addressField.placeholder = "Address"
+        }
+        
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
         present(alert, animated: true)
@@ -151,6 +167,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
+        //name
         if let personName = person.name {
             cell.textLabel?.text = "\(person.id). \(personName)"
         }
@@ -158,9 +175,17 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             cell.textLabel?.text = "NA"
         }
         
+        //grade
         if self.isVIP(person: people[indexPath.row]) {
-            cell.textLabel?.text = (cell.textLabel?.text)! + "  "  + "(\((person as! VIP).grade))"
-        }        
+            cell.textLabel?.text = (cell.textLabel?.text)! + " "  + "(\((person as! VIP).grade!))"
+        }
+        
+        //address
+        if let address = person.address,
+            let city = address.city {
+            cell.textLabel?.text = (cell.textLabel?.text)! + " from "  + "'\(city)'"
+        }
+        
         return cell
     }
     

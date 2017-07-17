@@ -2,13 +2,12 @@
 //  Person+CoreDataProperties.swift
 //  HitList
 //
-//  Created by Karunakar Bandikatla on 14/07/17.
+//  Created by Karunakar Bandikatla on 17/07/17.
 //  Copyright © 2017 Karunakar Bandikatla. All rights reserved.
 //
 
 import Foundation
 import CoreData
-
 
 extension Person {
 
@@ -20,6 +19,7 @@ extension Person {
     @NSManaged public var id: Int64
     @NSManaged public var lastUpdated: NSDate?
     @NSManaged public var name: String?
+    @NSManaged public var address: Address?
     
     class func entityName() -> String {
         return "Person"

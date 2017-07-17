@@ -18,4 +18,19 @@ extension UIAlertController {
         target.present(alert, animated: true, completion: nil)
     }
     
+    /*
+     
+     static let nameErrorDomain = "nameErrorDomain"
+ 
+     class func entityName() -> String {
+     return "Person"
+     }
+     
+     class func activeUsers() -> NSPredicate {
+     let predicate: NSPredicate = NSPredicate(format: "active == true")
+     return predicate
+     }
+ 
+ */
+    
 }
