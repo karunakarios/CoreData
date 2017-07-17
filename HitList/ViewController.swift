@@ -49,6 +49,10 @@ class ViewController: UIViewController {
                     return
             }
             
+            if nameToSave.isEmpty {
+                return
+            }
+            
             var personGrade: String?
             var personAddress: String?
             

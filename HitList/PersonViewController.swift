@@ -20,10 +20,12 @@ class PersonViewController: UIViewController {
         super.viewDidLoad()
         detailsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "DetailCell")
         detailsTableView.separatorStyle = .none
+        
         if let me = self.person,
             let name = me.name {
             self.title = name
         }
+        
     }
    
     //MARK:- IBActions
@@ -51,13 +53,33 @@ extension PersonViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DetailCell", for: indexPath)
         cell.textLabel?.textColor = UIColor.darkGray
+        
+        var personName = "NA"
+        var personGrade = "NA"
+        var personAddress = "NA"
+        
+        if let me = self.person {
+            if let name = me.name {
+                personName = name
+            }
+            if let meVIP = me as? VIP {
+                if let grade = meVIP.grade {
+                    personGrade = grade
+                }
+            }
+            if let address = me.address,
+                let city = address.city {
+                personAddress = city
+            }
+        }
+        
         switch indexPath.row {
         case 0:
-            cell.textLabel?.text = "Name : \(self.person!.name!)"
+            cell.textLabel?.text = "Name : \(personName)"
         case 1:
-            cell.textLabel?.text = "Grade : \((self.person as! VIP).grade!)"
+            cell.textLabel?.text = "Grade : \(personGrade)"
         case 2:
-            cell.textLabel?.text = "Address : \(self.person!.address!.city!)"
+            cell.textLabel?.text = "Address : \(personAddress)"
         default:
             break
         }
