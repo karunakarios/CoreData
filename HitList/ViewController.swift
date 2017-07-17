@@ -14,10 +14,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var people: [NSManagedObject] = []
+    var selectedPerson: Person?
+    let screenTitle = "Employees"
+    let addTitle = "Add Employee"
+    let editTitle = "Edit Name"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Persons List"
+        self.title = screenTitle
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         _ = CoreDataManager.sharedInstance.applicationDocumentsDirectory
     }
@@ -26,6 +30,7 @@ class ViewController: UIViewController {
         super.viewWillAppear(animated)
         CoreDataManager.sharedInstance.fetchEntity(name: Person.entityName(), by: Person.activeUsers()) { (fetchResults: [NSManagedObject]) in
             self.people = fetchResults
+            self.tableView.reloadData()
         }        
     }
     
@@ -33,8 +38,8 @@ class ViewController: UIViewController {
     
     @IBAction func addName(_ sender: AnyObject) {
         
-        let alert = UIAlertController(title: "New Name",
-                                      message: "Add a new name",
+        let alert = UIAlertController(title: addTitle,
+                                      message: "",
                                       preferredStyle: .alert)
         
         let saveAction = UIAlertAction(title: "Save", style: .default) {
@@ -103,7 +108,7 @@ class ViewController: UIViewController {
         guard let oldName: String = person.value(forKeyPath: "name") as? String else {
             return
         }
-        let alert = UIAlertController(title: "Edit Name",
+        let alert = UIAlertController(title: editTitle,
                                       message: oldName,
                                       preferredStyle: .alert)
         if let textField = alert.textFields?.first {
@@ -150,9 +155,30 @@ class ViewController: UIViewController {
         return person.isKind(of: VIP.self) ? true : false
     }
     
+
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier {
+            if identifier == "persondetail" {
+                let personVC = segue.destination as! PersonViewController
+                if let person = self.selectedPerson {
+                    personVC.person = person
+                }
+            }
+        }
+     }
+    
+    func displayDetail(for person: Person) {
+        weak var weakself = self
+        self.selectedPerson = person
+        self.performSegue(withIdentifier: "persondetail", sender: weakself)
+    }
+    
 }
 
-// MARK: - UITableViewDataSource
+// MARK: - UITableViewDataSource & UITableViewDelegate
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
@@ -204,6 +230,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             self.deleteData(for: person)
         }
         return [edit,delete]
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let person = people[indexPath.row]
+        self.displayDetail(for: person as! Person)
     }
     
 }

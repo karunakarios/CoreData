@@ -23,6 +23,7 @@
 		07D176781F1CCE9400124889 /* Person+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D176741F1CCE9400124889 /* Person+CoreDataProperties.swift */; };
 		07D1767F1F1CCF7200124889 /* Address+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D1767D1F1CCF7200124889 /* Address+CoreDataClass.swift */; };
 		07D176801F1CCF7200124889 /* Address+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D1767E1F1CCF7200124889 /* Address+CoreDataProperties.swift */; };
+		07D176821F1D02CD00124889 /* PersonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D176811F1D02CD00124889 /* PersonViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		07D176741F1CCE9400124889 /* Person+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		07D1767D1F1CCF7200124889 /* Address+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Address+CoreDataClass.swift"; sourceTree = "<group>"; };
 		07D1767E1F1CCF7200124889 /* Address+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Address+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		07D176811F1D02CD00124889 /* PersonViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 				0760D97C1F1769D900898275 /* CoreDataModels */,
 				07B0DE241F160DF9001C8028 /* AppDelegate.swift */,
 				07B0DE261F160DF9001C8028 /* ViewController.swift */,
+				07D176811F1D02CD00124889 /* PersonViewController.swift */,
 				0760D97A1F1753C800898275 /* CoreDataManager.swift */,
 				0760D9851F17999200898275 /* UIAlertController+Utils.swift */,
 				07B0DE281F160DF9001C8028 /* Main.storyboard */,
@@ -301,6 +304,7 @@
 				0760D9861F17999200898275 /* UIAlertController+Utils.swift in Sources */,
 				07D176681F1CCE4500124889 /* VIP+CoreDataProperties.swift in Sources */,
 				07D176671F1CCE4500124889 /* VIP+CoreDataClass.swift in Sources */,
+				07D176821F1D02CD00124889 /* PersonViewController.swift in Sources */,
 				07D176801F1CCF7200124889 /* Address+CoreDataProperties.swift in Sources */,
 				07B0DE271F160DF9001C8028 /* ViewController.swift in Sources */,
 				07B0DE251F160DF9001C8028 /* AppDelegate.swift in Sources */,
