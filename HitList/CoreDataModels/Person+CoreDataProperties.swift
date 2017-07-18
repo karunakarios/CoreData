@@ -35,7 +35,7 @@ extension Person {
     }
     
     func isHavingSpouse() -> Bool {
-        if let spouseObj = self.spouse {
+        if self.spouse != nil {
             return true
         }
         return false
@@ -60,7 +60,7 @@ extension Person {
         }
         
         if !self.isValidGrade() {
-            throw NSError(domain: Person.PersonGradeErrorDomain, code: 100, userInfo: ["message" : "Grade should be one of [A, SA, M]"])
+            throw NSError(domain: Person.PersonGradeErrorDomain, code: 100, userInfo: ["message" : "Grade should be one of [D, SD, M] \n\n\n D - Developer \n SD - Senior Developer \n M - Manager"])
         }
     }
     

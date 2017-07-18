@@ -58,7 +58,7 @@ class PersonViewController: UIViewController {
         alert.addAction(addSpouse)
         
         
-        let addReportee = UIAlertAction(title: "Add Reportee", style: .default) {
+        let addReportee = UIAlertAction(title: "Add Reportee (For M level)", style: .default) {
             [unowned self] action in
             self.addReportee()
         }
