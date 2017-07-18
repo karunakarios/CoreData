@@ -68,10 +68,6 @@ class PersonViewController: UIViewController {
                     return
             }
             
-            if nameToSave.isEmpty {
-                return
-            }
-            
             var personGrade: String?
             var personAddress: String?
             
@@ -91,8 +87,11 @@ class PersonViewController: UIViewController {
                          self.checkForSpouse()
                     }, onFailure: { (err: NSError) in
                         weak var weakself = self
-                        if err.domain == Person.nameErrorDomain {
+                        if err.domain == Person.PersonNameErrorDomain {
                             UIAlertController.showAlert(title: "Name", message: err.userInfo["message"] as! String, target: weakself!)
+                        }
+                        else if err.domain == Person.PersonGradeErrorDomain {
+                            UIAlertController.showAlert(title: "Grade", message: err.userInfo["message"] as! String, target: weakself!)
                         }
                     })
             }

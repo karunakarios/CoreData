@@ -73,8 +73,11 @@ class ViewController: UIViewController {
                     self.tableView.reloadData()
                 }, onFailure: { (err: NSError) in
                     weak var weakself = self
-                    if err.domain == Person.nameErrorDomain {
+                    if err.domain == Person.PersonNameErrorDomain {
                         UIAlertController.showAlert(title: "Name", message: err.userInfo["message"] as! String, target: weakself!)
+                    }
+                    else if err.domain == Person.PersonGradeErrorDomain {
+                        UIAlertController.showAlert(title: "Grade", message: err.userInfo["message"] as! String, target: weakself!)
                     }
                 })
             }
@@ -131,7 +134,7 @@ class ViewController: UIViewController {
             }, onFailure: { (err: NSError) in
                 self.tableView.reloadData()
                 weak var weakself = self
-                if err.domain == Person.nameErrorDomain {
+                if err.domain == Person.PersonNameErrorDomain {
                     UIAlertController.showAlert(title: "Name", message: err.userInfo["message"] as! String, target: weakself!)
                 }
             })

@@ -20,7 +20,7 @@ extension Person {
     @NSManaged public var id: Int64
     @NSManaged public var lastUpdated: NSDate?
     @NSManaged public var name: String?
-    @NSManaged public var address: String?
+    @NSManaged public var address: Address?
     @NSManaged public var spouse: Person?
     
     class func entityName() -> String {
