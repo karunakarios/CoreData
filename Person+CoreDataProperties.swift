@@ -29,5 +29,27 @@ extension Person {
         let predicate: NSPredicate = NSPredicate(format: "active == true")
         return predicate
     }
+    
+    public override func validateForInsert() throws {
+        if let personName = self.name {
+            if personName.isEmpty {
+                throw NSError(domain: Person.PersonNameErrorDomain, code: Person.errorCodes.minLimitNotReached.rawValue, userInfo: ["message" : Person.PersonNameMinLimit])
+            }
+            else if personName.characters.count > 10 {
+                throw NSError(domain: Person.PersonNameErrorDomain, code: Person.errorCodes.maxLimitExceeded.rawValue, userInfo: ["message" : Person.PersonNameMaxLimit])
+            }
+        }
+    }
+    
+    public override func validateForUpdate() throws {
+        if let personName = self.name {
+            if personName.isEmpty {
+                throw NSError(domain: Person.PersonNameErrorDomain, code: Person.errorCodes.minLimitNotReached.rawValue, userInfo: ["message" : Person.PersonNameMinLimit])
+            }
+            else if personName.characters.count > 10 {
+                throw NSError(domain: Person.PersonNameErrorDomain, code: Person.errorCodes.maxLimitExceeded.rawValue, userInfo: ["message" : Person.PersonNameMaxLimit])
+            }
+        }
+    }
 
 }

@@ -12,6 +12,13 @@ import CoreData
 @objc(Person)
 public class Person: NSManagedObject {
     
-    static let nameErrorDomain = "nameErrorDomain"
+    static let PersonNameErrorDomain = "PersonNameErrorDomain"
+    static let PersonNameMinLimit = "Name should not be empty!"
+    static let PersonNameMaxLimit = "Name should not be more than 10 charcaters!"
+    
+    enum errorCodes: Int {
+        case maxLimitExceeded = 0
+        case minLimitNotReached = 1
+    }
 
 }
