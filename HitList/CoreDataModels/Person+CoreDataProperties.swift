@@ -34,6 +34,17 @@ extension Person {
         return predicate
     }
     
+    func isHavingSpouse() -> Bool {
+        if let spouseObj = self.spouse {
+            return true
+        }
+        return false
+    }
+    
+    func isManager() -> Bool {
+        return false
+    }
+    
     func isValidGrade() -> Bool {
         return false
     }

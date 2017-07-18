@@ -21,36 +21,63 @@ class PersonViewController: UIViewController {
         super.viewDidLoad()
         detailsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "DetailCell")
         detailsTableView.separatorStyle = .none
-        
         if let me = self.person {
             if let name = me.name {
                 self.title = name
             }
             checkForSpouse()
         }
-        
     }
     
-    func checkForSpouse() {
+    //MARK:- Private API
+    
+    private func checkForSpouse() {
         if let me = self.person {
-            if let _ = me.spouse {
-                addSpouseBarButton.isEnabled = false
+            if me.isHavingSpouse() {
                 totalRows = 4
                 self.detailsTableView.reloadData()
             }
         }
     }
-   
-    //MARK:- IBActions
-
-    @IBAction func deleteMe(_ sender: Any) {
-        CoreDataManager.sharedInstance.delete(person: self.person!) { (status: Bool
-            ) in
-           _ =  self.navigationController?.popViewController(animated: true)
+    
+    private func showActions() {
+        
+        guard let me = self.person else {
+            return
         }
+        
+        let alert = UIAlertController(title: "",
+                                      message: "",
+                                      preferredStyle: .actionSheet)
+        
+        let addSpouse = UIAlertAction(title: "Add Spouse", style: .default) {
+            [unowned self] action in
+            self.addSpouse()
+        }
+        addSpouse.isEnabled = !me.isHavingSpouse()
+        alert.addAction(addSpouse)
+        
+        
+        let addReportee = UIAlertAction(title: "Add Reportee", style: .default) {
+            [unowned self] action in
+            self.addReportee()
+        }
+        addReportee.isEnabled = me.isManager()
+        alert.addAction(addReportee)
+        
+        
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
     }
     
-    @IBAction func addSpouse(_ sender: Any) {
+    private func addReportee() {
+        
+    }
+    
+    private func addSpouse() {
         
         if let me:Person = self.person,
             let _ = me.spouse {
@@ -64,7 +91,7 @@ class PersonViewController: UIViewController {
         let saveAction = UIAlertAction(title: "Save", style: .default) {
             [unowned self] action in
             guard let textField = alert.textFields?.first,
-                let nameToSave = textField.text else { 
+                let nameToSave = textField.text else {
                     return
             }
             
@@ -83,17 +110,17 @@ class PersonViewController: UIViewController {
             }
             
             CoreDataManager.sharedInstance.fetchEntity(name: Person.entityName(), by: Person.activeUsers()) { (fetchResults: [NSManagedObject]) in
-                    CoreDataManager.sharedInstance.savePerson(id: fetchResults.count+1, name: nameToSave, lastUpdated: Date(), grade: personGrade, address: personAddress, spouse: self.person, onCompletion: { (person: NSManagedObject) in
-                         self.checkForSpouse()
-                    }, onFailure: { (err: NSError) in
-                        weak var weakself = self
-                        if err.domain == Person.PersonNameErrorDomain {
-                            UIAlertController.showAlert(title: "Name", message: err.userInfo["message"] as! String, target: weakself!)
-                        }
-                        else if err.domain == Person.PersonGradeErrorDomain {
-                            UIAlertController.showAlert(title: "Grade", message: err.userInfo["message"] as! String, target: weakself!)
-                        }
-                    })
+                CoreDataManager.sharedInstance.savePerson(id: fetchResults.count+1, name: nameToSave, lastUpdated: Date(), grade: personGrade, address: personAddress, spouse: self.person, onCompletion: { (person: NSManagedObject) in
+                    self.checkForSpouse()
+                }, onFailure: { (err: NSError) in
+                    weak var weakself = self
+                    if err.domain == Person.PersonNameErrorDomain {
+                        UIAlertController.showAlert(title: "Name", message: err.userInfo["message"] as! String, target: weakself!)
+                    }
+                    else if err.domain == Person.PersonGradeErrorDomain {
+                        UIAlertController.showAlert(title: "Grade", message: err.userInfo["message"] as! String, target: weakself!)
+                    }
+                })
             }
             
         }
@@ -114,9 +141,7 @@ class PersonViewController: UIViewController {
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
         present(alert, animated: true)
-        
     }
-    
     
     func spouseName() -> String {
         guard let me = self.person,
@@ -125,6 +150,20 @@ class PersonViewController: UIViewController {
                 return "NA"
         }
         return name
+    }
+    
+   
+    //MARK:- IBActions
+
+    @IBAction func deleteMe(_ sender: Any) {
+        CoreDataManager.sharedInstance.delete(person: self.person!) { (status: Bool
+            ) in
+           _ =  self.navigationController?.popViewController(animated: true)
+        }
+    }
+   
+    @IBAction func addSpouse(_ sender: Any) {
+        showActions()
     }
     
 }
