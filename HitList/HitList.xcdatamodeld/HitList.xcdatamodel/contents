@@ -9,6 +9,8 @@
         <attribute name="lastUpdated" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
         <relationship name="address" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Address" syncable="YES"/>
+        <relationship name="manager" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Person" inverseName="reportees" inverseEntity="Person" syncable="YES"/>
+        <relationship name="reportees" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Person" inverseName="manager" inverseEntity="Person" syncable="YES"/>
         <relationship name="spouse" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Person" inverseName="spouse" inverseEntity="Person" syncable="YES"/>
     </entity>
     <entity name="VIP" representedClassName="VIP" parentEntity="Person" syncable="YES">
@@ -16,7 +18,7 @@
     </entity>
     <elements>
         <element name="Address" positionX="63" positionY="9" width="128" height="60"/>
-        <element name="Person" positionX="-63" positionY="-18" width="128" height="135"/>
+        <element name="Person" positionX="-63" positionY="-18" width="128" height="165"/>
         <element name="VIP" positionX="180" positionY="-0" width="128" height="58"/>
     </elements>
 </model>
