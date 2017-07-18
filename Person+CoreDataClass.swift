@@ -13,6 +13,7 @@ import CoreData
 public class Person: NSManagedObject {
     
     static let PersonNameErrorDomain = "PersonNameErrorDomain"
+    static let PersonGradeErrorDomain = "PersonGradeErrorDomain"
     static let PersonNameMinLimit = "Name should not be empty!"
     static let PersonNameMaxLimit = "Name should not be more than 10 charcaters!"
     

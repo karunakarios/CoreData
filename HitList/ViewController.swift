@@ -60,6 +60,9 @@ class ViewController: UIViewController {
                 if err.domain == Person.PersonNameErrorDomain {
                     UIAlertController.showAlert(title: "Name", message: err.userInfo["message"] as! String, target: weakself!)
                 }
+                else if err.domain == Person.PersonGradeErrorDomain {
+                    UIAlertController.showAlert(title: "Grade", message: err.userInfo["message"] as! String, target: weakself!)
+                }
             })
             
         }
@@ -67,6 +70,13 @@ class ViewController: UIViewController {
         let cancelAction = UIAlertAction(title: "Cancel", style: .default)
         alert.addTextField()
         alert.addTextField()
+        
+        if let nameTextField = alert.textFields?.first,
+            let gradeTextField = alert.textFields?[1] {
+            nameTextField.placeholder = "Name"
+            gradeTextField.placeholder = "Grade"
+        }
+        
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
         present(alert, animated: true)
@@ -90,9 +100,7 @@ class ViewController: UIViewController {
         let alert = UIAlertController(title: "Edit Name",
                                       message: oldName,
                                       preferredStyle: .alert)
-        if let textField = alert.textFields?.first {
-            textField.text = oldName
-        }
+
         let saveAction = UIAlertAction(title: "Save", style: .default) {
             [unowned self] action in
             guard let textField = alert.textFields?.first,
@@ -115,6 +123,10 @@ class ViewController: UIViewController {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default)
         alert.addTextField()
+        if let textField = alert.textFields?.first {
+            textField.text = oldName
+            textField.placeholder = "Name"
+        }
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
         present(alert, animated: true)
@@ -159,7 +171,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         if self.isVIP(person: people[indexPath.row]) {
-            cell.textLabel?.text = (cell.textLabel?.text)! + "  "  + "(\((person as! VIP).grade))"
+            cell.textLabel?.text = (cell.textLabel?.text)! + "  "  + "(\((person as! VIP).grade!))"
         }        
         return cell
     }

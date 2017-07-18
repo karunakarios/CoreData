@@ -30,6 +30,10 @@ extension Person {
         return predicate
     }
     
+    func isValidGrade() -> Bool {
+        return false
+    }
+    
     public override func validateForInsert() throws {
         if let personName = self.name {
             if personName.isEmpty {
@@ -38,6 +42,10 @@ extension Person {
             else if personName.characters.count > 10 {
                 throw NSError(domain: Person.PersonNameErrorDomain, code: Person.errorCodes.maxLimitExceeded.rawValue, userInfo: ["message" : Person.PersonNameMaxLimit])
             }
+        }
+        
+        if !self.isValidGrade() {
+            throw NSError(domain: Person.PersonGradeErrorDomain, code: 100, userInfo: ["message" : "Grade should be one of [A, SA, M]"])
         }
     }
     

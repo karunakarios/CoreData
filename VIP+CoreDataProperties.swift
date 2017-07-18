@@ -21,4 +21,17 @@ extension VIP {
         return "VIP"
     }
     
+    override public func isValidGrade() -> Bool {
+        var isValid = super.isValidGrade()
+        if let gradeObj = self.grade {
+            if gradeObj.lowercased() == "m" || gradeObj.lowercased() == "a" || gradeObj.lowercased() == "sa" {
+                isValid = true
+            }
+            else {
+                isValid = false
+            }
+        }
+        return isValid
+    }    
+    
 }
