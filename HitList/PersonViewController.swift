@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import CoreData
 
 class PersonViewController: UIViewController {
     
     @IBOutlet weak var detailsTableView: UITableView!
     @IBOutlet weak var addSpouseBarButton: UIBarButtonItem!
     
-    let totalRows = 3
+    var totalRows = 3
     var person: Person?
     
     override func viewDidLoad() {
@@ -21,11 +22,23 @@ class PersonViewController: UIViewController {
         detailsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "DetailCell")
         detailsTableView.separatorStyle = .none
         
-        if let me = self.person,
-            let name = me.name {
-            self.title = name
+        if let me = self.person {
+            if let name = me.name {
+                self.title = name
+            }
+            checkForSpouse()
         }
         
+    }
+    
+    func checkForSpouse() {
+        if let me = self.person {
+            if let _ = me.spouse {
+                addSpouseBarButton.isEnabled = false
+                totalRows = 4
+                self.detailsTableView.reloadData()
+            }
+        }
     }
    
     //MARK:- IBActions
@@ -38,6 +51,81 @@ class PersonViewController: UIViewController {
     }
     
     @IBAction func addSpouse(_ sender: Any) {
+        
+        if let me:Person = self.person,
+            let _ = me.spouse {
+            return
+        }
+        
+        let alert = UIAlertController(title: "Add Spouse",
+                                      message: "",
+                                      preferredStyle: .alert)
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) {
+            [unowned self] action in
+            guard let textField = alert.textFields?.first,
+                let nameToSave = textField.text else { 
+                    return
+            }
+            
+            if nameToSave.isEmpty {
+                return
+            }
+            
+            var personGrade: String?
+            var personAddress: String?
+            
+            if let gradeField = alert.textFields?[1] {
+                if !(gradeField.text?.isEmpty)! {
+                    personGrade = gradeField.text!
+                }
+            }
+            if let addressField = alert.textFields?[2] {
+                if !(addressField.text?.isEmpty)! {
+                    personAddress = addressField.text!
+                }
+            }
+            
+            CoreDataManager.sharedInstance.fetchEntity(name: Person.entityName(), by: Person.activeUsers()) { (fetchResults: [NSManagedObject]) in
+                    CoreDataManager.sharedInstance.savePerson(id: fetchResults.count+1, name: nameToSave, lastUpdated: Date(), grade: personGrade, address: personAddress, spouse: self.person, onCompletion: { (person: NSManagedObject) in
+                         self.checkForSpouse()
+                    }, onFailure: { (err: NSError) in
+                        weak var weakself = self
+                        if err.domain == Person.nameErrorDomain {
+                            UIAlertController.showAlert(title: "Name", message: err.userInfo["message"] as! String, target: weakself!)
+                        }
+                    })
+            }
+            
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default)
+        alert.addTextField()
+        alert.addTextField()
+        alert.addTextField()
+        
+        if let nameField = alert.textFields?[0],
+            let gradeField = alert.textFields?[1],
+            let addressField = alert.textFields?[2] {
+            nameField.placeholder = "Name"
+            gradeField.placeholder = "Grade"
+            addressField.placeholder = "Address"
+        }
+        
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true)
+        
+    }
+    
+    
+    func spouseName() -> String {
+        guard let me = self.person,
+            let spouse = me.spouse,
+            let name = spouse.name else {
+                return "NA"
+        }
+        return name
     }
     
 }
@@ -80,10 +168,11 @@ extension PersonViewController: UITableViewDataSource {
             cell.textLabel?.text = "Grade : \(personGrade)"
         case 2:
             cell.textLabel?.text = "Address : \(personAddress)"
+        case 3:
+            cell.textLabel?.text = "Spouse : \(self.spouseName())"
         default:
             break
         }
         return cell
     }
-    
 }

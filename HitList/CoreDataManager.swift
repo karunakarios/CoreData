@@ -83,7 +83,7 @@ public class CoreDataManager:NSObject {
         }
     }
     
-    func savePerson(id: Int, name: String, lastUpdated: Date, grade: String?, address: String?, onCompletion: @escaping (_ person:NSManagedObject) -> Void, onFailure: @escaping (_ error: NSError) -> Void) {
+    func savePerson(id: Int, name: String, lastUpdated: Date, grade: String?, address: String?, spouse: Person?, onCompletion: @escaping (_ person:NSManagedObject) -> Void, onFailure: @escaping (_ error: NSError) -> Void) {
         
         let managedContext = CoreDataManager.sharedInstance.persistentContainer.viewContext
         let isvip = (grade != nil) ? true : false
@@ -98,6 +98,10 @@ public class CoreDataManager:NSObject {
         
         if isvip {
             (person as! VIP).grade = grade!
+        }
+        
+        if let spouseObj = spouse {
+            (person as! Person).spouse = spouseObj
         }
         
         if let personAddress = address {

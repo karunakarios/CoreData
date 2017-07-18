@@ -67,16 +67,17 @@ class ViewController: UIViewController {
                 }
             }
             
-            CoreDataManager.sharedInstance.savePerson(id: self.people.count + 1, name: nameToSave, lastUpdated: Date(), grade: personGrade, address: personAddress, onCompletion: { (person: NSManagedObject) in
-                self.people.append(person)
-                self.tableView.reloadData()
-            }, onFailure: { (err: NSError) in
-                weak var weakself = self
-                if err.domain == Person.nameErrorDomain {
-                    UIAlertController.showAlert(title: "Name", message: err.userInfo["message"] as! String, target: weakself!)
-                }
-            })
-            
+            CoreDataManager.sharedInstance.fetchEntity(name: Person.entityName(), by: Person.activeUsers()) { (fetchResults: [NSManagedObject]) in
+                CoreDataManager.sharedInstance.savePerson(id: fetchResults.count + 1, name: nameToSave, lastUpdated: Date(), grade: personGrade, address: personAddress, spouse: nil, onCompletion: { (person: NSManagedObject) in
+                    self.people.append(person)
+                    self.tableView.reloadData()
+                }, onFailure: { (err: NSError) in
+                    weak var weakself = self
+                    if err.domain == Person.nameErrorDomain {
+                        UIAlertController.showAlert(title: "Name", message: err.userInfo["message"] as! String, target: weakself!)
+                    }
+                })
+            }
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default)
@@ -199,7 +200,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         //name
         if let personName = person.name {
-            cell.textLabel?.text = "\(person.id). \(personName)"
+            cell.textLabel?.text = "\(indexPath.row+1). \(personName)"
         }
         else {
             cell.textLabel?.text = "NA"
