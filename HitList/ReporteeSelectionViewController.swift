@@ -25,12 +25,40 @@ class ReporteeSelectionViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         CoreDataManager.sharedInstance.fetchEntity(name: Person.entityName(), by: Person.exceptManagers()) { (fetchResults: [NSManagedObject]) in
-            self.people = fetchResults
+            
+            var results: [NSManagedObject] = fetchResults
+            
+            var counter = 0
+            for person in results {
+                if let manager = (person as! Person).manager {
+                    if manager == self.manager {
+                        results.remove(at: counter)
+                    }
+                }
+                counter += 1
+            }
+            
+            self.people = results
             self.employeesListTableView.reloadData()
         }
     }
     
     func addSelectedReporteeToManager() {
+        
+        guard let managerObj = self.manager,
+            let reportee = self.selectedPerson else {
+                return
+        }
+        
+        reportee.manager = managerObj
+        
+//        let reportees: NSMutableSet = managerObj.reportees!
+//        reportees.add(reportee)
+//        
+//        managerObj.reportees = reportees
+        
+        CoreDataManager.sharedInstance.saveContext()
+        
     }
     
     //MARK:- IBActions
@@ -69,8 +97,7 @@ extension ReporteeSelectionViewController: UITableViewDataSource, UITableViewDel
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-         self.selectedPerson = people[indexPath.row] as? Person
-        self.addSelectedReporteeToManager()
+        self.selectedPerson = people[indexPath.row] as? Person
     }
     
 }

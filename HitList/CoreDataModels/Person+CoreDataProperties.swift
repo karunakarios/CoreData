@@ -23,7 +23,7 @@ extension Person {
     @NSManaged public var address: Address?
     @NSManaged public var spouse: Person?
     @NSManaged public var manager: Person?
-    @NSManaged public var reportees: [Person]?
+    @NSManaged public var reportees: NSMutableSet?
     
     class func entityName() -> String {
         return "Person"
