@@ -14,7 +14,7 @@ class PersonViewController: UIViewController {
     @IBOutlet weak var detailsTableView: UITableView!
     @IBOutlet weak var addSpouseBarButton: UIBarButtonItem!
     
-    var totalRows = 3
+    var totalRows = 5
     var person: Person?
     
     override func viewDidLoad() {
@@ -25,18 +25,15 @@ class PersonViewController: UIViewController {
             if let name = me.name {
                 self.title = name
             }
-            checkForSpouse()
+            reload()
         }
     }
     
     //MARK:- Private API
     
-    private func checkForSpouse() {
-        if let me = self.person {
-            if me.isHavingSpouse() {
-                totalRows = 4
-                self.detailsTableView.reloadData()
-            }
+    private func reload() {
+        if self.person != nil {
+            self.detailsTableView.reloadData()
         }
     }
     
@@ -57,24 +54,17 @@ class PersonViewController: UIViewController {
         addSpouse.isEnabled = !me.isHavingSpouse()
         alert.addAction(addSpouse)
         
-        
         let addReportee = UIAlertAction(title: "Add Reportee (For M level)", style: .default) {
             [unowned self] action in
             self.addReportee()
         }
         addReportee.isEnabled = me.isManager()
         alert.addAction(addReportee)
-        
-        
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .default)
         alert.addAction(cancelAction)
         
         present(alert, animated: true)
-    }
-    
-    private func addReportee() {
-        
     }
     
     private func addSpouse() {
@@ -111,7 +101,7 @@ class PersonViewController: UIViewController {
             
             CoreDataManager.sharedInstance.fetchEntity(name: Person.entityName(), by: Person.activeUsers()) { (fetchResults: [NSManagedObject]) in
                 CoreDataManager.sharedInstance.savePerson(id: fetchResults.count+1, name: nameToSave, lastUpdated: Date(), grade: personGrade, address: personAddress, spouse: self.person, onCompletion: { (person: NSManagedObject) in
-                    self.checkForSpouse()
+                    self.reload()
                 }, onFailure: { (err: NSError) in
                     weak var weakself = self
                     if err.domain == Person.PersonNameErrorDomain {
@@ -152,6 +142,21 @@ class PersonViewController: UIViewController {
         return name
     }
     
+    func managerName() -> String {
+        guard let me = self.person,
+            let manager = me.manager,
+            let name = manager.name else {
+                return "NA"
+        }
+        return name
+    }
+    
+    
+    private func addReportee() {
+        weak var weakself = self
+        self.performSegue(withIdentifier: "ReporteeSelection", sender: weakself)
+    }
+    
    
     //MARK:- IBActions
 
@@ -165,6 +170,21 @@ class PersonViewController: UIViewController {
     @IBAction func addSpouse(_ sender: Any) {
         showActions()
     }
+    
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier {
+            if identifier == "ReporteeSelection" {
+                let reporteeVC = segue.destination as! ReporteeSelectionViewController
+                if let me = self.person {
+                    reporteeVC.manager = me
+                }
+            }
+        }
+    }
+    
     
 }
 
@@ -208,6 +228,8 @@ extension PersonViewController: UITableViewDataSource {
             cell.textLabel?.text = "Address : \(personAddress)"
         case 3:
             cell.textLabel?.text = "Spouse : \(self.spouseName())"
+        case 4:
+            cell.textLabel?.text = "Manager : \(self.managerName())"
         default:
             break
         }

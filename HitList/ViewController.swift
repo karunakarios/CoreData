@@ -159,10 +159,6 @@ class ViewController: UIViewController {
         }
     }
     
-    func isVIP(person: NSManagedObject) -> Bool {
-        return person.isKind(of: VIP.self) ? true : false
-    }
-    
 
      // MARK: - Navigation
      
@@ -210,7 +206,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         //grade
-        if self.isVIP(person: people[indexPath.row]) {
+        if person.isVIP() {
             cell.textLabel?.text = (cell.textLabel?.text)! + " "  + "(\((person as! VIP).grade!))"
         }
         

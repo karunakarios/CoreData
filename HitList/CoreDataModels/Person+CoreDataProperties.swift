@@ -34,6 +34,11 @@ extension Person {
         return predicate
     }
     
+    class func exceptManagers() -> NSPredicate {
+        let predicate: NSPredicate = NSPredicate(format: "active == true AND grade != 'M'")
+        return predicate
+    }
+    
     func isHavingSpouse() -> Bool {
         if self.spouse != nil {
             return true
@@ -73,6 +78,10 @@ extension Person {
                 throw NSError(domain: Person.PersonNameErrorDomain, code: Person.errorCodes.maxLimitExceeded.rawValue, userInfo: ["message" : Person.PersonNameMaxLimit])
             }
         }
+    }
+    
+    public func isVIP() -> Bool {
+        return self.isKind(of: VIP.self) ? true : false
     }
     
 }

@@ -106,11 +106,56 @@
                     <connections>
                         <outlet property="addSpouseBarButton" destination="n9W-v4-r0c" id="GDD-fr-iui"/>
                         <outlet property="detailsTableView" destination="XbW-MP-aUD" id="9s3-tJ-JOb"/>
+                        <segue destination="l6Z-nR-4Hp" kind="show" identifier="ReporteeSelection" id="oU0-mq-LZa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pce-hh-IGf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1729" y="404"/>
+        </scene>
+        <!--Reportee Selection View Controller-->
+        <scene sceneID="dXB-MP-ckw">
+            <objects>
+                <viewController storyboardIdentifier="ReporteeSelection" id="l6Z-nR-4Hp" customClass="ReporteeSelectionViewController" customModule="HitList" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TeY-pL-YMv"/>
+                        <viewControllerLayoutGuide type="bottom" id="oGa-7x-yeq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="JBK-kA-n3G">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="55E-XM-88X">
+                                <rect key="frame" x="24" y="72" width="327" height="579"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="l6Z-nR-4Hp" id="0H3-Rc-MZn"/>
+                                    <outlet property="delegate" destination="l6Z-nR-4Hp" id="r5d-gf-Zw4"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="55E-XM-88X" firstAttribute="top" secondItem="TeY-pL-YMv" secondAttribute="bottom" constant="8" id="9sa-eX-z9e"/>
+                            <constraint firstItem="oGa-7x-yeq" firstAttribute="top" secondItem="55E-XM-88X" secondAttribute="bottom" constant="16" id="BXp-Ty-p5m"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="55E-XM-88X" secondAttribute="trailing" constant="8" id="Gim-8E-CbG"/>
+                            <constraint firstItem="55E-XM-88X" firstAttribute="leading" secondItem="JBK-kA-n3G" secondAttribute="leadingMargin" constant="8" id="T3R-5I-BpL"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="vyt-QL-H7H">
+                        <barButtonItem key="rightBarButtonItem" title="Add as Reportee" id="NYx-FG-x9s">
+                            <connections>
+                                <action selector="addReportee:" destination="l6Z-nR-4Hp" id="Ljs-Cb-rfE"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="employeesListTableView" destination="55E-XM-88X" id="aog-6U-Btv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gha-4o-01r" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2486" y="404"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ScZ-Q3-9LY">

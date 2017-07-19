@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0760D97B1F1753C800898275 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0760D97A1F1753C800898275 /* CoreDataManager.swift */; };
 		0760D9861F17999200898275 /* UIAlertController+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0760D9851F17999200898275 /* UIAlertController+Utils.swift */; };
+		07838C011F1F660C00F73773 /* ReporteeSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07838C001F1F660C00F73773 /* ReporteeSelectionViewController.swift */; };
 		07B0DE251F160DF9001C8028 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B0DE241F160DF9001C8028 /* AppDelegate.swift */; };
 		07B0DE271F160DF9001C8028 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B0DE261F160DF9001C8028 /* ViewController.swift */; };
 		07B0DE2A1F160DF9001C8028 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07B0DE281F160DF9001C8028 /* Main.storyboard */; };
@@ -46,6 +47,7 @@
 /* Begin PBXFileReference section */
 		0760D97A1F1753C800898275 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		0760D9851F17999200898275 /* UIAlertController+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Utils.swift"; sourceTree = "<group>"; };
+		07838C001F1F660C00F73773 /* ReporteeSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReporteeSelectionViewController.swift; sourceTree = "<group>"; };
 		07B0DE211F160DF9001C8028 /* HitList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HitList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07B0DE241F160DF9001C8028 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		07B0DE261F160DF9001C8028 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				07B0DE241F160DF9001C8028 /* AppDelegate.swift */,
 				07B0DE261F160DF9001C8028 /* ViewController.swift */,
 				07D176811F1D02CD00124889 /* PersonViewController.swift */,
+				07838C001F1F660C00F73773 /* ReporteeSelectionViewController.swift */,
 				0760D97A1F1753C800898275 /* CoreDataManager.swift */,
 				0760D9851F17999200898275 /* UIAlertController+Utils.swift */,
 				07B0DE281F160DF9001C8028 /* Main.storyboard */,
@@ -299,6 +302,7 @@
 			files = (
 				0760D97B1F1753C800898275 /* CoreDataManager.swift in Sources */,
 				07D176771F1CCE9400124889 /* Person+CoreDataClass.swift in Sources */,
+				07838C011F1F660C00F73773 /* ReporteeSelectionViewController.swift in Sources */,
 				07D1767F1F1CCF7200124889 /* Address+CoreDataClass.swift in Sources */,
 				07B0DE2D1F160DF9001C8028 /* HitList.xcdatamodeld in Sources */,
 				0760D9861F17999200898275 /* UIAlertController+Utils.swift in Sources */,
