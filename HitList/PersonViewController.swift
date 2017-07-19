@@ -16,6 +16,8 @@ class PersonViewController: UIViewController {
     
     var totalRows = 5
     var person: Person?
+    var totalReportees = 0
+    var reportees: [Person]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,16 +27,26 @@ class PersonViewController: UIViewController {
             if let name = me.name {
                 self.title = name
             }
-            reload()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reload()
     }
     
     //MARK:- Private API
     
     private func reload() {
+        if let me = self.person,
+            let reportees = me.reportees {
+            totalReportees = reportees.count
+            self.reportees = reportees.allObjects as? [Person]
+        }
         if self.person != nil {
             self.detailsTableView.reloadData()
         }
+        
     }
     
     private func showActions() {
@@ -192,47 +204,79 @@ class PersonViewController: UIViewController {
 
 extension PersonViewController: UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if let me = self.person {
+            if me.isManager() {
+                return 2
+            }
+        }
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {
+            return "Personal Info"
+        }
+        if section == 1 {
+            return "Reportees"
+        }
+        return ""
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return totalRows
+        if section == 0 {
+            return totalRows
+        }
+        if section == 1 {
+            return totalReportees
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DetailCell", for: indexPath)
         cell.textLabel?.textColor = UIColor.darkGray
         
-        var personName = "NA"
-        var personGrade = "NA"
-        var personAddress = "NA"
-        
-        if let me = self.person {
-            if let name = me.name {
-                personName = name
-            }
-            if let meVIP = me as? VIP {
-                if let grade = meVIP.grade {
-                    personGrade = grade
+        if indexPath.section == 0 {
+            var personName = "NA"
+            var personGrade = "NA"
+            var personAddress = "NA"
+            
+            if let me = self.person {
+                if let name = me.name {
+                    personName = name
+                }
+                if let meVIP = me as? VIP {
+                    if let grade = meVIP.grade {
+                        personGrade = grade
+                    }
+                }
+                if let address = me.address,
+                    let city = address.city {
+                    personAddress = city
                 }
             }
-            if let address = me.address,
-                let city = address.city {
-                personAddress = city
+            
+            switch indexPath.row {
+            case 0:
+                cell.textLabel?.text = "Name : \(personName)"
+            case 1:
+                cell.textLabel?.text = "Grade : \(personGrade)"
+            case 2:
+                cell.textLabel?.text = "Address : \(personAddress)"
+            case 3:
+                cell.textLabel?.text = "Spouse : \(self.spouseName())"
+            case 4:
+                cell.textLabel?.text = "Manager : \(self.managerName())"
+            default:
+                break
             }
         }
         
-        switch indexPath.row {
-        case 0:
-            cell.textLabel?.text = "Name : \(personName)"
-        case 1:
-            cell.textLabel?.text = "Grade : \(personGrade)"
-        case 2:
-            cell.textLabel?.text = "Address : \(personAddress)"
-        case 3:
-            cell.textLabel?.text = "Spouse : \(self.spouseName())"
-        case 4:
-            cell.textLabel?.text = "Manager : \(self.managerName())"
-        default:
-            break
+        if indexPath.section == 1 {
+            cell.textLabel?.text = self.reportees?[indexPath.row].name!
         }
+
         return cell
     }
 }

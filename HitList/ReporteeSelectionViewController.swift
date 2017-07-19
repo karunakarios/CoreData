@@ -26,38 +26,20 @@ class ReporteeSelectionViewController: UIViewController {
         super.viewWillAppear(animated)
         CoreDataManager.sharedInstance.fetchEntity(name: Person.entityName(), by: Person.exceptManagers()) { (fetchResults: [NSManagedObject]) in
             
-            var results: [NSManagedObject] = fetchResults
-            
-            var counter = 0
-            for person in results {
-                if let manager = (person as! Person).manager {
-                    if manager == self.manager {
-                        results.remove(at: counter)
-                    }
-                }
-                counter += 1
-            }
-            
+            let results: [NSManagedObject] = fetchResults
             self.people = results
             self.employeesListTableView.reloadData()
         }
     }
     
     func addSelectedReporteeToManager() {
-        
         guard let managerObj = self.manager,
             let reportee = self.selectedPerson else {
                 return
         }
-        
-        reportee.manager = managerObj
-        
-//        let reportees: NSMutableSet = managerObj.reportees!
-//        reportees.add(reportee)
-//        
-//        managerObj.reportees = reportees
-        
+        managerObj.addToReportees(reportee)
         CoreDataManager.sharedInstance.saveContext()
+        _ =  self.navigationController?.popViewController(animated: true)
         
     }
     
@@ -91,6 +73,14 @@ extension ReporteeSelectionViewController: UITableViewDataSource, UITableViewDel
         //grade
         if person.isVIP() {
             cell.textLabel?.text = (cell.textLabel?.text)! + " "  + "(\((person as! VIP).grade!))"
+        }
+        
+        if let managerObj = person.manager,
+            let manager = self.manager {
+            if managerObj == manager {
+                cell.isUserInteractionEnabled = false
+                cell.textLabel?.textColor = UIColor.lightGray
+            }
         }
         return cell
     }

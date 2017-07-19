@@ -23,7 +23,7 @@ extension Person {
     @NSManaged public var address: Address?
     @NSManaged public var spouse: Person?
     @NSManaged public var manager: Person?
-    @NSManaged public var reportees: NSMutableSet?
+    @NSManaged public var reportees: NSSet?
     
     class func entityName() -> String {
         return "Person"
@@ -83,5 +83,22 @@ extension Person {
     public func isVIP() -> Bool {
         return self.isKind(of: VIP.self) ? true : false
     }
+    
+}
+
+// MARK: Generated accessors for reportees
+extension Person {
+    
+    @objc(addReporteesObject:)
+    @NSManaged public func addToReportees(_ value: Person)
+    
+    @objc(removeReporteesObject:)
+    @NSManaged public func removeFromReportees(_ value: Person)
+    
+    @objc(addReportees:)
+    @NSManaged public func addToReportees(_ values: NSSet)
+    
+    @objc(removeReportees:)
+    @NSManaged public func removeFromReportees(_ values: NSSet)
     
 }
